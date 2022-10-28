@@ -7,11 +7,13 @@ exports.loginController = async (req, res, next) => {
     let { email, password } = req.body;
     console.log(req.body);
     let user = await AuthSchema.find({ email }).select("+password");
-    console.log(user);
-
     // let TOKEN = user.regToken();
 
-    res.status(201).json(req.body);
+    res.status(201).json({
+      success: true,
+      message: "user logined",
+      user,
+    });
     next();
   } catch (error) {
     console.log(error);

@@ -19,7 +19,7 @@ const StudentSchema = new Schema(
       select: false,
     },
     batchCode: {
-      type: String,
+      type: [],
     },
   },
   { timestamps: true }
