@@ -14,9 +14,8 @@ let startServer = () => {
     connectDataBase();
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
-    app.use(cors());
 
-    // routes
+    app.use(cors());
     app.get("/", (req, res) => {
       res.send("ok");
     });
