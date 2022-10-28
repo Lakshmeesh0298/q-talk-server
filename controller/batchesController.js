@@ -33,18 +33,42 @@ exports.registerbatchController = async (req, res, next) => {
     let addstudents = workbook;
     let finaldata = { ...data, addstudents };
     console.log(finaldata);
+    let batchfind = await BatchSchema.findOne({
+      batchcode: req.body.batchcode,
+    });
+    if (batchfind) {
+      res.status(400).json({ message: "Batchcode allready register" });
+    }
+
     let savedData = await BatchSchema.create(finaldata);
     let batchId = savedData._id;
-    let studentsobj = addstudents.map(x => {
-      return {
-        username: x.username,
-        email: x.email,
-        phone_number: x.phonenumber,
-        password: pass,
-        batchCode: batchId,
-      };
+
+    addstudents?.forEach(async x => {
+      try {
+        let studentData = await StudentSchema.findOne({
+          phone_number: x.phonenumber,
+        });
+        if (studentData) {
+          await StudentSchema.findByIdAndUpdate(studentData._id, {
+            $push: { batchCode: batchId },
+          });
+        } else {
+          await StudentSchema.create({
+            username: x.username,
+            email: x.email,
+            phone_number: x.phonenumber,
+            password: pass,
+            batchCode: [batchId],
+          });
+        }
+        res.status(201).json({
+          message: "batch and students db created",
+        });
+      } catch (error) {
+        console.log(error);
+      }
     });
-    let savedStudentsData = await StudentSchema.create(...studentsobj);
+    // let savedStudentsData = await StudentSchema.create(...studentsobj);
 
     res.status(201).json({
       success: true,
