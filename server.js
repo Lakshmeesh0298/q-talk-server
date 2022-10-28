@@ -1,19 +1,22 @@
 const express = require("express");
+const cors = require("cors");
+//internal import
 const { PORT } = require("./config");
 const { connectDataBase } = require("./config/dataBase");
 const batchRouter = require("./router/batchesRoute");
 const chatrouter = require("./router/chatRoutes");
 const authrouter = require("./router/authRoute");
 
-const cors = require("cors");
 let app = express();
 let startServer = () => {
   try {
+    // internal middlewares
     connectDataBase();
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
-
     app.use(cors());
+
+    // routes
     app.get("/", (req, res) => {
       res.send("ok");
     });

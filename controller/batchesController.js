@@ -32,19 +32,29 @@ exports.registerbatchController = async (req, res, next) => {
 
     let addstudents = workbook;
     let finaldata = { ...data, addstudents };
-    console.log(finaldata);
+    // avoiding the duplication of batch
+    let batchRegistered = await BatchSchema.findOne({ batchcode: req.body.batchcode })
+    if (batchRegistered) {
+      return res.status(400).json({ message: "Batch already registered" })
+    }
     let savedData = await BatchSchema.create(finaldata);
     let batchId = savedData._id;
-    let studentsobj = addstudents.map(x => {
-      return {
-        username: x.username,
-        email: x.email,
-        phone_number: x.phonenumber,
-        password: pass,
-        batchCode: batchId,
-      };
+    // avoid duplication of student and save the student data to database
+    let studentsobj = addstudents?.forEach(async x => {
+      let registeredStudent = await StudentSchema.findOne({ phone_number: x.phonenumber })
+      if (registeredStudent) {
+        await StudentSchema.findByIdAndUpdate(registeredStudent._id, { $push: { batchcode: x.batchcode } })
+      } else {
+        await StudentSchema.create({
+          username: x.username,
+          email: x.email,
+          phone_number: x.phonenumber,
+          password: pass,
+          batchcode: [x.batchcode],
+        });
+      }
     });
-    let savedStudentsData = await StudentSchema.create(...studentsobj);
+    // let savedStudentsData = await StudentSchema.create(...studentsobj);
 
     res.status(201).json({
       success: true,

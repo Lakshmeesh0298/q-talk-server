@@ -20,9 +20,12 @@ const AuthSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["trainer", "consilar", "admin"],
+      enum: ["trainer", "admin"],
       default: "trainer",
     },
+    batchcode: {
+      type: []
+    }
   },
   { timestamps: true }
 );
