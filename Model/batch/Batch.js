@@ -24,7 +24,7 @@ const BatchSchema = new Schema(
       type: String,
     },
     addstudents: {
-      type: [{}],
+      type: [],
     },
   },
   { timestamps: true }
