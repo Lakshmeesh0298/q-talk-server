@@ -3,6 +3,7 @@ const { PORT } = require("./config");
 const { connectDataBase } = require("./config/dataBase");
 const batchRouter = require("./router/batchesRoute");
 const chatrouter = require("./router/chatRoutes");
+const authrouter = require("./router/authRoute");
 
 const cors = require("cors");
 let app = express();
@@ -18,6 +19,7 @@ let startServer = () => {
     });
     app.use("/batch", batchRouter);
     app.use("/chat", chatrouter);
+    app.use("/auth", authrouter);
 
     app.listen(PORT, err => {
       if (err) throw err;
