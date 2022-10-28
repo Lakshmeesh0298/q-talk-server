@@ -14,6 +14,10 @@ const chatrouter = express.Router();
 chatrouter.post("/newConverstion", firstConversation);
 chatrouter.get("/:userId", getConversation);
 chatrouter.post("/sendMessages", createmessages);
-chatrouter.get("/getMessages", getMessages);
-
+chatrouter.get("/getMessages/:conerstionId", getMessages);
+chatrouter.get("/find/:firstUserId/:secondUserId",)
 module.exports = chatrouter;
+
+
+
+
