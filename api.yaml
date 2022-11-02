@@ -1,0 +1,22 @@
+swagger: "2.0"
+info:
+  title: Q-Talk
+  description: this is api development docs
+  version: 1.0
+  contact:
+    email: lakshmeeshhs0298@gmail.com
+  license:
+    name: apache
+    url: https://apache.org
+  servers:
+    url: http://localhost:3800
+    description: my localhost running...
+schemes: [http, https]
+paths:
+  /auth/login:
+    post:
+      summary: login app
+      description: login checking with POST request
+      responses:
+        201:
+          description: Success

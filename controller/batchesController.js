@@ -50,7 +50,7 @@ exports.registerbatchController = async (req, res, next) => {
         });
         if (studentData) {
           await StudentSchema.findByIdAndUpdate(studentData._id, {
-            $push: { batchCode: batchId },
+            $push: { batchcode: batchId },
           });
         } else {
           await StudentSchema.create({
@@ -58,7 +58,7 @@ exports.registerbatchController = async (req, res, next) => {
             email: x.email,
             phone_number: x.phonenumber,
             password: pass,
-            batchCode: [batchId],
+            batchcode: [batchId],
           });
         }
         res.status(201).json({

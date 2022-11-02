@@ -20,24 +20,25 @@ const AuthSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["trainer", "consilar", "admin"],
+      enum: ["trainer", "admin"],
       default: "trainer",
     },
   },
   { timestamps: true }
 );
 
-// AuthSchema.pre("save", async () => {
-//   let crypted = await bcrypt.genSalt(20);
-//   this.password = await bcrypt.hash(this.password, crypted);
-// });
-AuthSchema.methods.regToken = () => {
-  return jwt.sign({ id: this.id });
+AuthSchema.pre("save", async function () {
+  let crypted = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, crypted);
+});
+
+AuthSchema.methods.regTOKEN = function () {
+  return jwt.sign({ id: this._id }, JWT_SECRET, { expiresIn: JWT_EXPIRE });
 };
 
-// AuthSchema.methods.matchPASSWORD = async function (enteredPassword) {
-//   console.log(enteredPassword, this.password);
-//   return await bcrypt.compare(enteredPassword, this.password);
-// };
+AuthSchema.methods.matchPASSWORD = async function (enteredPassword) {
+  console.log(enteredPassword, this.password);
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 module.exports = model("auths", AuthSchema);
